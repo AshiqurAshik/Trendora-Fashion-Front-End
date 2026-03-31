@@ -11,6 +11,9 @@ import RegisterPage from './Components/Register/RegisterPage';
 import Accessories from './Pages/Accessories/Accessories';
 import Heritage from './Pages/Heritage/Heritage';
 import Concierge from './Pages/Concierge/Concierge';
+import AllSuit from './Pages/Home/AllSuit';
+import ProductDetails from './Pages/Home/SuitDetails';
+import SuitDetails from './Pages/Home/SuitDetails';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +48,13 @@ const router = createBrowserRouter([
   {
     path:"/register", Component:RegisterPage
   },
+  {
+    path:'/all-suit', Component: AllSuit
+  },
+
+  {
+    path:"/product/:id", Component:SuitDetails
+  }
 ]);
 createRoot(document.getElementById('root')).render(
   <StrictMode>
