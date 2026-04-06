@@ -4,17 +4,166 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const IconArrowLeft = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <line x1="19" y1="12" x2="5" y2="12" />
     <polyline points="12 19 5 12 12 5" />
   </svg>
 );
 
 const IconCheck = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="3"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <polyline points="20 6 9 17 4 12" />
   </svg>
 );
+
+const IconClose = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
+
+const SizeChartModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  const sizeData = [
+    { label: 'S', chest: '88-92', waist: '76-80', sleeve: '61' },
+    { label: 'M', chest: '93-97', waist: '81-85', sleeve: '63' },
+    { label: 'L', chest: '98-102', waist: '86-90', sleeve: '65' },
+    { label: 'XL', chest: '103-107', waist: '91-95', sleeve: '67' },
+    { label: 'XXL', chest: '108-112', waist: '96-100', sleeve: '69' },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/90 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.95, opacity: 0, y: 20 }}
+        className="bg-[#0f0f0f] border border-white/10 w-full max-w-2xl overflow-hidden rounded-sm"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Modal Header */}
+        <div className="flex justify-between items-center px-8 py-6 border-b border-white/5">
+          <div>
+            <h3 className="text-xl font-serif italic text-white">Size Guide</h3>
+            <p className="text-[10px] uppercase tracking-widest text-[#B58D7C] mt-1 font-bold">
+              Measurements in Centimeters
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-white/40 hover:text-white transition-colors"
+          >
+            <IconClose />
+          </button>
+        </div>
+
+        {/* Modal Body */}
+        <div className="p-8 space-y-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-white/5">
+                <th className="py-4 text-[10px] uppercase tracking-widest text-white/30 font-bold">
+                  Size
+                </th>
+                <th className="py-4 text-[10px] uppercase tracking-widest text-white/30 font-bold">
+                  Chest
+                </th>
+                <th className="py-4 text-[10px] uppercase tracking-widest text-white/30 font-bold">
+                  Waist
+                </th>
+                <th className="py-4 text-[10px] uppercase tracking-widest text-white/30 font-bold">
+                  Sleeve
+                </th>
+              </tr>
+            </thead>
+            <tbody className="text-sm font-light text-white/70">
+              {sizeData.map((row) => (
+                <tr
+                  key={row.label}
+                  className="border-b border-white/5 hover:bg-white/[0.02] transition-colors"
+                >
+                  <td className="py-4 font-bold text-[#B58D7C]">{row.label}</td>
+                  <td className="py-4">{row.chest}</td>
+                  <td className="py-4">{row.waist}</td>
+                  <td className="py-4">{row.sleeve}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className="space-y-4 pt-4">
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-bold">
+              How to Measure
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-[12px] leading-relaxed text-white/40 italic">
+              <div>
+                <span className="text-[#B58D7C] font-bold block mb-1">
+                  Chest
+                </span>
+                Measure around the fullest part of your chest, keeping the tape
+                horizontal.
+              </div>
+              <div>
+                <span className="text-[#B58D7C] font-bold block mb-1">
+                  Waist
+                </span>
+                Measure around your natural waistline, inline with your navel.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Modal Footer */}
+        <div className="px-8 py-6 bg-white/[0.02] border-t border-white/5 flex justify-end">
+          <button
+            onClick={onClose}
+            className="text-[10px] uppercase tracking-[0.4em] font-bold text-white/60 hover:text-white"
+          >
+            Close Guide
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const SuitDetails = () => {
   const { id } = useParams();
@@ -23,6 +172,7 @@ const SuitDetails = () => {
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [isAdding, setIsAdding] = useState(false);
+  const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -45,10 +195,10 @@ const SuitDetails = () => {
   }
 
   const specs = [
-    { label: "Fabric", value: product.fabric },
-    { label: "Fit", value: product.fit },
-    { label: "Origin", value: product.origin },
-    { label: "Construction", value: product.construction }
+    { label: 'Fabric', value: product.fabric },
+    { label: 'Fit', value: product.fit },
+    { label: 'Origin', value: product.origin },
+    { label: 'Construction', value: product.construction },
   ];
 
   const handleAddToCart = () => {
@@ -56,13 +206,57 @@ const SuitDetails = () => {
     setTimeout(() => setIsAdding(false), 2000);
   };
 
+  const stockCount = product.stock || 0;
+  const isLowStock = stockCount > 0 && stockCount <= 5;
+
   return (
     <div className="bg-[#0a0a0a] min-h-screen text-[#e5e5e5] selection:bg-[#B58D7C]/30 font-sans">
+      {/* Custom Global Scrollbar Styles */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        /* Main Page Scrollbar */
+        ::-webkit-scrollbar {
+          width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+          background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #B58D7C20;
+          border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: #B58D7C50;
+        }
+
+        /* Modal Inner Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 2px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #B58D7C40;
+        }
+      `,
+        }}
+      />
+
+      <AnimatePresence>
+        {isSizeChartOpen && (
+          <SizeChartModal
+            isOpen={isSizeChartOpen}
+            onClose={() => setIsSizeChartOpen(false)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 w-full z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/[0.03] px-[6%] py-5">
         <div className="max-w-[1600px] mx-auto flex justify-between items-center">
-          <button 
+          <button
             onClick={() => navigate(-1)}
             className="group flex items-center space-x-3 text-[10px] uppercase tracking-[0.5em] text-white/40 hover:text-[#B58D7C]"
           >
@@ -71,20 +265,20 @@ const SuitDetails = () => {
             </span>
             <span className="font-semibold">Return to Collection</span>
           </button>
-          <div className="text-xl font-serif italic tracking-tighter text-white/90"> 
-TRENDORA</div>
+          <div className="text-xl font-serif italic tracking-tighter text-white/90">
+            TRENDORA
+          </div>
         </div>
       </nav>
 
       <main className="pt-32 pb-24 px-[6%] max-w-[1600px] mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-24">
-
           {/* Image Section */}
           <motion.div className="lg:col-span-7">
             <div className="group relative aspect-[4/5] bg-stone-900/50 overflow-hidden rounded-sm ring-1 ring-white/5 shadow-2xl">
-              <img 
-                src={product.image} 
-                alt={product.name} 
+              <img
+                src={product.image}
+                alt={product.name}
                 className="w-full h-full object-cover transform transition-transform duration-[2s] group-hover:scale-110 grayscale-[20%] group-hover:grayscale-0"
               />
             </div>
@@ -93,24 +287,38 @@ TRENDORA</div>
           {/* Details Section */}
           <div className="lg:col-span-5 flex flex-col justify-center">
             <div className="space-y-12">
-
               {/* Header */}
               <div className="space-y-4">
                 <span className="text-[10px] uppercase tracking-[0.6em] text-[#B58D7C] font-bold">
-                  Exclusively Tailored
+                  {product.category} • Signature Line
                 </span>
 
                 <h1 className="text-5xl md:text-6xl font-serif italic text-white leading-tight">
                   {product.name}
                 </h1>
 
-                <div className="flex items-baseline space-x-3">
-                  <span className="text-3xl font-light text-[#B58D7C]">
-                    ৳ {Number(product.price).toLocaleString()}
-                  </span>
-                  <span className="text-xs text-white/30 tracking-widest uppercase italic">
-                    Vat inclusive
-                  </span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-baseline space-x-3">
+                    <span className="text-3xl font-light text-[#B58D7C]">
+                      ৳ {Number(product.price).toLocaleString()}
+                    </span>
+                    <span className="text-xs text-white/30 tracking-widest uppercase italic">
+                      Vat inclusive
+                    </span>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <div
+                      className={`w-1.5 h-1.5 rounded-full ${stockCount > 0 ? (isLowStock ? 'bg-orange-500 animate-pulse' : 'bg-green-500') : 'bg-red-500'}`}
+                    ></div>
+                    <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">
+                      {stockCount > 0
+                        ? isLowStock
+                          ? `Only ${stockCount} Left`
+                          : 'Available'
+                        : 'Out of Stock'}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -127,7 +335,7 @@ TRENDORA</div>
                       {spec.label}
                     </p>
                     <p className="text-sm text-white/80 font-medium tracking-wide">
-                      {spec.value}
+                      {spec.value || 'N/A'}
                     </p>
                   </div>
                 ))}
@@ -135,12 +343,20 @@ TRENDORA</div>
 
               {/* Size Selector */}
               <div className="space-y-5">
-                <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-bold">
-                  Select European Size
-                </p>
+                <div className="flex justify-between items-end">
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-bold">
+                    Select Size
+                  </p>
+                  <button
+                    onClick={() => setIsSizeChartOpen(true)}
+                    className="text-[9px] uppercase tracking-[0.2em] text-[#B58D7C] font-bold border-b border-[#B58D7C]/30 hover:border-[#B58D7C] transition-all"
+                  >
+                    Size Guide
+                  </button>
+                </div>
 
                 <div className="flex flex-wrap gap-2.5">
-                  {product.available_sizes?.split(',').map(size => (
+                  {product.available_sizes?.split(',').map((size) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size.trim())}
@@ -160,32 +376,57 @@ TRENDORA</div>
               <div className="flex flex-col gap-4 pt-4">
                 <button
                   onClick={handleAddToCart}
-                  disabled={!selectedSize || isAdding}
-                  className="w-full py-5 rounded-sm font-bold uppercase tracking-[0.4em] text-[11px] bg-[#B58D7C] text-black"
+                  disabled={!selectedSize || isAdding || stockCount === 0}
+                  className={`w-full py-5 rounded-sm font-bold uppercase tracking-[0.4em] text-[11px] transition-all ${
+                    !selectedSize || stockCount === 0
+                      ? 'bg-white/5 text-white/20 cursor-not-allowed'
+                      : 'bg-[#B58D7C] text-black hover:bg-[#a37e6f]'
+                  }`}
                 >
                   <AnimatePresence mode="wait">
                     {isAdding ? (
-                      <motion.div key="added" className="flex items-center justify-center gap-2">
-                        <IconCheck />
-                        Item Added
+                      <motion.div
+                        key="added"
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <IconCheck /> Item Added
                       </motion.div>
                     ) : (
                       <motion.span key="add">
-                        {selectedSize ? "Add to Wardrobe" : "Select a Size"}
+                        {stockCount === 0
+                          ? 'Unavailable'
+                          : selectedSize
+                            ? 'Add to Wardrobe'
+                            : 'Select a Size'}
                       </motion.span>
                     )}
                   </AnimatePresence>
                 </button>
 
                 <button
-                  onClick={() => navigate('/concierge')}
-                  className="w-full py-5 border border-white/10 rounded-sm text-white/60 font-bold uppercase tracking-[0.4em] text-[11px]"
+                  onClick={() => navigate('/tailoring')}
+                  className="w-full py-5 border border-white/10 rounded-sm text-white/60 font-bold uppercase tracking-[0.4em] text-[11px] hover:bg-white/5 transition-all"
                 >
                   Book Private Fitting
                 </button>
               </div>
-
             </div>
+          </div>
+        </div>
+
+        {/* Brand Signature Line */}
+        <div className="mt-24 pt-12 border-t border-white/[0.03] flex flex-col items-center justify-center space-y-6 opacity-60">
+          <div className="h-20 w-[1px] bg-gradient-to-b from-transparent via-[#B58D7C]/50 to-transparent"></div>
+          <div className="text-center space-y-2">
+            <p className="text-[10px] uppercase tracking-[0.8em] text-white/40">
+              Established MMXXIV
+            </p>
+            <p className="text-2xl font-serif italic text-white/80 tracking-tighter">
+              Trendora Atelier
+            </p>
+            <p className="text-[9px] uppercase tracking-[0.3em] text-[#B58D7C]">
+              Defining the Modern Gentleman
+            </p>
           </div>
         </div>
       </main>
