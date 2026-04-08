@@ -1,19 +1,20 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const Banner = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative h-screen w-full flex items-center overflow-hidden">
-
       {/* Background */}
       <div className="absolute inset-0">
-        {/* Gradient overlay for premium depth */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30 z-10" />
 
         <motion.img
           initial={{ scale: 1.2 }}
           animate={{ scale: 1 }}
-          transition={{ duration: 10, ease: "linear" }}
+          transition={{ duration: 10, ease: 'linear' }}
           src="https://images.unsplash.com/photo-1593032465175-481ac7f401a0"
           className="w-full h-full object-cover"
           alt="Luxury Fashion"
@@ -41,10 +42,10 @@ const Banner = () => {
             </span>
           </h1>
 
-          {/* Divider line (premium touch) */}
+          {/* Divider */}
           <motion.div
             initial={{ width: 0 }}
-            animate={{ width: "80px" }}
+            animate={{ width: '80px' }}
             transition={{ delay: 0.5, duration: 0.6 }}
             className="h-[1px] bg-white/40 mb-8"
           />
@@ -54,13 +55,17 @@ const Banner = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/all-suit')}
               className="border border-white text-white px-8 py-4 text-[11px] tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all duration-300"
             >
               View Collection
             </motion.button>
 
             {/* Secondary link */}
-            <button className="text-white/60 hover:text-white transition text-[11px] tracking-[0.4em] uppercase flex items-center gap-3 group">
+            <button
+              onClick={() => navigate('/heritage')}
+              className="text-white/60 hover:text-white transition text-[11px] tracking-[0.4em] uppercase flex items-center gap-3 group"
+            >
               The Story
               <span className="w-8 h-[1px] bg-white/40 group-hover:w-12 transition-all"></span>
             </button>

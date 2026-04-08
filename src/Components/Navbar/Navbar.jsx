@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../../Auth/AuthContext";
 
 /* ICONS */
 const IconCart = () => (
@@ -29,6 +30,8 @@ const IconX = () => (
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const { user, signOutUser } = useContext(AuthContext); 
 
   const navLinks = [
     { name: "Collections", path: "/" },
@@ -84,7 +87,6 @@ const Navbar = () => {
                     {link.name}
                   </NavLink>
 
-                  {/* ACTIVE + HOVER UNDERLINE */}
                   <NavLink to={link.path}>
                     {({ isActive }) => (
                       <span
@@ -100,12 +102,21 @@ const Navbar = () => {
 
             {/* RIGHT */}
             <div className="hidden lg:flex items-center gap-8 text-[11px] uppercase tracking-[0.3em]">
-              <NavLink
-                to="/login"
-                className="text-white/50 hover:text-white transition"
-              >
-                Sign In
-              </NavLink>
+              {!user ? (
+                <NavLink
+                  to="/login"
+                  className="text-white/50 hover:text-white transition"
+                >
+                  Sign In
+                </NavLink>
+              ) : (
+                <button
+                  onClick={signOutUser}
+                  className="text-white/50 hover:text-white transition"
+                >
+                  Sign Out
+                </button>
+              )}
 
               <button className="relative">
                 <motion.div whileHover={{ scale: 1.15 }}>
@@ -135,10 +146,8 @@ const Navbar = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/95 z-40 flex flex-col justify-between py-20"
           >
-            {/* TOP SPACE */}
             <div />
 
-            {/* VERTICAL NAV (CENTERED) */}
             <div className="flex flex-col items-center space-y-10">
               {navLinks.map((link) => (
                 <NavLink
@@ -154,9 +163,29 @@ const Navbar = () => {
                   {link.name}
                 </NavLink>
               ))}
+
+              {/* AUTH (MOBILE) */}
+              {!user ? (
+                <NavLink
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="text-xl text-white/50 hover:text-white"
+                >
+                  Sign In
+                </NavLink>
+              ) : (
+                <button
+                  onClick={() => {
+                    signOutUser();
+                    setMenuOpen(false);
+                  }}
+                  className="text-xl text-white/50 hover:text-white"
+                >
+                  Sign Out
+                </button>
+              )}
             </div>
 
-            {/* BOTTOM */}
             <div className="text-center text-white/40 text-xs tracking-widest">
               © TRENDORA
             </div>

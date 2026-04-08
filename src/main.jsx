@@ -12,8 +12,8 @@ import Accessories from './Pages/Accessories/Accessories';
 import Heritage from './Pages/Heritage/Heritage';
 import Concierge from './Pages/Concierge/Concierge';
 import AllSuit from './Pages/Home/AllSuit';
-import ProductDetails from './Pages/Home/SuitDetails';
 import SuitDetails from './Pages/Home/SuitDetails';
+import AuthProvider from './Auth/AuthProvider';
 
 const router = createBrowserRouter([
   {
@@ -57,7 +57,11 @@ const router = createBrowserRouter([
   }
 ]);
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <RouterProvider router={router} />
+   <StrictMode>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
+
+  
 );
