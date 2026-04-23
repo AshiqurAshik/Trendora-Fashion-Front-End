@@ -14,6 +14,7 @@ import Concierge from './Pages/Concierge/Concierge';
 import AllSuit from './Pages/Home/AllSuit';
 import SuitDetails from './Pages/Home/SuitDetails';
 import AuthProvider from './Auth/AuthProvider';
+import Cart from './Components/Cart/Cart';
 
 const router = createBrowserRouter([
   {
@@ -21,47 +22,57 @@ const router = createBrowserRouter([
     element: <Root></Root>,
     children: [
       {
-        index:true, Component:Homepage
+        index: true,
+        Component: Homepage,
       },
 
       {
-        path:'/tailoring', Component:Tailoring
+        path: '/tailoring',
+        Component: Tailoring,
       },
 
       {
-        path:'/accessories', Component: Accessories
+        path: '/accessories',
+        Component: Accessories,
       },
       {
-        path:'/heritage', Component:Heritage
+        path: '/heritage',
+        Component: Heritage,
       },
       {
-        path:'/concierge', Component:Concierge
-      }
-      
-    ]
+        path: '/concierge',
+        Component: Concierge,
+      },
+      {
+        path: '/cart',
+        Component: Cart,
+      },
+    ],
   },
 
   {
-    path:"/login", Component:LoginPage
+    path: '/login',
+    Component: LoginPage,
   },
 
   {
-    path:"/register", Component:RegisterPage
+    path: '/register',
+    Component: RegisterPage,
   },
   {
-    path:'/all-suit', Component: AllSuit
+    path: '/all-suit',
+    Component: AllSuit,
   },
 
   {
-    path:"/product/:id", Component:SuitDetails
-  }
+    path: '/product/:id',
+    Component: SuitDetails,
+  },
 ]);
 createRoot(document.getElementById('root')).render(
-   <StrictMode>
+  <StrictMode>
     <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
   </StrictMode>,
-
-  
 );

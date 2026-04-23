@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AuthContext } from './../../Auth/AuthContext';
 
+// --- Icons ---
 const IconArrowLeft = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -53,6 +55,7 @@ const IconClose = () => (
   </svg>
 );
 
+// --- Sub-components ---
 const SizeChartModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
@@ -165,9 +168,12 @@ const SizeChartModal = ({ isOpen, onClose }) => {
   );
 };
 
+// --- Main Component ---
 const SuitDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [quantity, setQuantity] = useState(1);
+  const { user } = useContext(AuthContext);
 
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState('');
@@ -201,9 +207,24 @@ const SuitDetails = () => {
     { label: 'Construction', value: product.construction },
   ];
 
-  const handleAddToCart = () => {
-    setIsAdding(true);
-    setTimeout(() => setIsAdding(false), 2000);
+  const handleAddToCart = async () => {
+    try {
+      const cartData = {
+        gmail: user?.email,
+        product_name: product.name,
+        product_image: product.image,
+        price: product.price,
+        quantity: quantity,
+        size: selectedSize,
+      };
+
+      const res = await axios.post('http://localhost:5000/cart/add', cartData);
+
+      setIsAdding(true);
+      setTimeout(() => setIsAdding(false), 2000);
+    } catch (error) {
+      console.error('❌ CART ERROR:', error.response?.data || error);
+    }
   };
 
   const stockCount = product.stock || 0;
@@ -211,36 +232,35 @@ const SuitDetails = () => {
 
   return (
     <div className="bg-[#0a0a0a] min-h-screen text-[#e5e5e5] selection:bg-[#B58D7C]/30 font-sans">
-      {/* Custom Global Scrollbar Styles */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
-        /* Main Page Scrollbar */
-        ::-webkit-scrollbar {
-          width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-          background: #0a0a0a;
-        }
-        ::-webkit-scrollbar-thumb {
-          background: #B58D7C20;
-          border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-          background: #B58D7C50;
-        }
+            /* Main Page Scrollbar */
+            ::-webkit-scrollbar {
+              width: 4px;
+            }
+            ::-webkit-scrollbar-track {
+              background: #0a0a0a;
+            }
+            ::-webkit-scrollbar-thumb {
+              background: #B58D7C20;
+              border-radius: 10px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+              background: #B58D7C50;
+            }
 
-        /* Modal Inner Scrollbar */
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 2px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #B58D7C40;
-        }
-      `,
+            /* Modal Inner Scrollbar */
+            .custom-scrollbar::-webkit-scrollbar {
+              width: 2px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+              background: transparent;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+              background: #B58D7C40;
+            }
+          `,
         }}
       />
 
@@ -309,7 +329,13 @@ const SuitDetails = () => {
 
                   <div className="flex items-center space-x-2">
                     <div
-                      className={`w-1.5 h-1.5 rounded-full ${stockCount > 0 ? (isLowStock ? 'bg-orange-500 animate-pulse' : 'bg-green-500') : 'bg-red-500'}`}
+                      className={`w-1.5 h-1.5 rounded-full ${
+                        stockCount > 0
+                          ? isLowStock
+                            ? 'bg-orange-500 animate-pulse'
+                            : 'bg-green-500'
+                          : 'bg-red-500'
+                      }`}
                     ></div>
                     <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">
                       {stockCount > 0
@@ -355,44 +381,95 @@ const SuitDetails = () => {
                   </button>
                 </div>
 
-                <div className="flex flex-wrap gap-2.5">
-                  {product.available_sizes?.split(',').map((size) => (
+                <div className="flex items-center justify-between">
+                  {/* Label */}
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-bold">
+                    Quantity
+                  </p>
+
+                  {/* Counter */}
+                  <div className="flex items-center border border-white/10 rounded-sm overflow-hidden bg-white/[0.02]">
+                    {/* Minus */}
                     <button
-                      key={size}
-                      onClick={() => setSelectedSize(size.trim())}
-                      className={`min-w-[64px] h-12 flex items-center justify-center text-xs transition-all rounded-sm border ${
-                        selectedSize === size.trim()
-                          ? 'border-[#B58D7C] bg-[#B58D7C] text-black font-bold'
-                          : 'border-white/10 text-white/50 hover:border-white/40 hover:text-white'
-                      }`}
+                      onClick={() =>
+                        setQuantity((prev) => Math.max(1, prev - 1))
+                      }
+                      className="px-4 py-2 text-white/50 hover:text-white hover:bg-white/5 transition active:scale-95"
                     >
-                      {size.trim()}
+                      −
                     </button>
-                  ))}
+
+                    {/* Value */}
+                    <span className="px-4 text-sm text-white font-medium tracking-wide">
+                      {quantity}
+                    </span>
+
+                    {/* Plus */}
+                    <button
+                      onClick={() => setQuantity((prev) => prev + 1)}
+                      className="px-4 py-2 text-white/50 hover:text-white hover:bg-white/5 transition active:scale-95"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-2.5">
+                  {product.available_sizes?.split(',').map((size) => {
+                    const cleanSize = size.trim();
+                    return (
+                      <button
+                        key={cleanSize}
+                        onClick={() => setSelectedSize(cleanSize)}
+                        className={`min-w-[64px] h-12 flex items-center justify-center text-xs transition-all rounded-sm border ${
+                          selectedSize === cleanSize
+                            ? 'border-[#B58D7C] bg-[#B58D7C] text-black font-bold'
+                            : 'border-white/10 text-white/50 hover:border-white/40 hover:text-white'
+                        }`}
+                      >
+                        {cleanSize}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Buttons */}
-              <div className="flex flex-col gap-4 pt-4">
+              {/* Action Buttons */}
+              <div className="flex flex-col gap-4 pt-6">
+                {/* Add to Cart */}
                 <button
                   onClick={handleAddToCart}
                   disabled={!selectedSize || isAdding || stockCount === 0}
-                  className={`w-full py-5 rounded-sm font-bold uppercase tracking-[0.4em] text-[11px] transition-all ${
+                  className={`relative w-full py-5 rounded-sm font-bold uppercase tracking-[0.4em] text-[11px] overflow-hidden group transition-all duration-300 ${
                     !selectedSize || stockCount === 0
                       ? 'bg-white/5 text-white/20 cursor-not-allowed'
-                      : 'bg-[#B58D7C] text-black hover:bg-[#a37e6f]'
+                      : 'bg-[#B58D7C] text-black hover:bg-[#a37e6f] active:scale-[0.98]'
                   }`}
                 >
+                  {/* Shine Effect */}
+                  {!(!selectedSize || stockCount === 0) && (
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
+                  )}
+
                   <AnimatePresence mode="wait">
                     {isAdding ? (
                       <motion.div
                         key="added"
-                        className="flex items-center justify-center gap-2"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="flex items-center justify-center gap-2 relative z-10"
                       >
                         <IconCheck /> Item Added
                       </motion.div>
                     ) : (
-                      <motion.span key="add">
+                      <motion.span
+                        key="add"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="relative z-10"
+                      >
                         {stockCount === 0
                           ? 'Unavailable'
                           : selectedSize
@@ -403,11 +480,15 @@ const SuitDetails = () => {
                   </AnimatePresence>
                 </button>
 
+                {/* Secondary Button */}
                 <button
                   onClick={() => navigate('/tailoring')}
-                  className="w-full py-5 border border-white/10 rounded-sm text-white/60 font-bold uppercase tracking-[0.4em] text-[11px] hover:bg-white/5 transition-all"
+                  className="relative w-full py-5 border border-white/10 rounded-sm text-white/60 font-bold uppercase tracking-[0.4em] text-[11px] overflow-hidden group hover:text-white transition-all duration-300"
                 >
-                  Book Private Fitting
+                  {/* Subtle Hover Glow */}
+                  <span className="absolute inset-0 bg-white/[0.03] opacity-0 group-hover:opacity-100 transition"></span>
+
+                  <span className="relative z-10">Book Private Fitting</span>
                 </button>
               </div>
             </div>

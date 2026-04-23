@@ -1,11 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { NavLink } from "react-router-dom";
-import { AuthContext } from "../../Auth/AuthContext";
+import React, { useState, useEffect, useContext } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Navigate, NavLink, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../Auth/AuthContext';
+import axios from 'axios';
 
 /* ICONS */
 const IconCart = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.6">
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="white"
+    strokeWidth="1.6"
+  >
     <circle cx="9" cy="21" r="1.5" />
     <circle cx="18" cy="21" r="1.5" />
     <path d="M1 1h4l2.68 12.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 1.95-1.57L23 6H6" />
@@ -30,21 +38,39 @@ const IconX = () => (
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+  const [items, setItems] = useState([]);
 
-  const { user, signOutUser } = useContext(AuthContext); 
+  const { user, signOutUser } = useContext(AuthContext);
 
   const navLinks = [
-    { name: "Collections", path: "/" },
-    { name: "Tailoring", path: "/tailoring" },
-    { name: "Accessories", path: "/accessories" },
-    { name: "Heritage", path: "/heritage" },
-    { name: "Concierge", path: "/concierge" },
+    { name: 'Collections', path: '/' },
+    { name: 'Tailoring', path: '/tailoring' },
+    { name: 'Accessories', path: '/accessories' },
+    { name: 'Heritage', path: '/heritage' },
+    { name: 'Concierge', path: '/concierge' },
   ];
 
   useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        if (!user?.email) return;
+
+        const res = await axios.get(`http://localhost:5000/cart/${user.email}`);
+
+        setItems(res.data);
+      } catch (err) {
+        console.error('Cart fetch error:', err);
+      }
+    };
+
+    fetchCart();
+  }, [user]);
+
+  useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
@@ -55,13 +81,12 @@ const Navbar = () => {
         animate={{ y: 0 }}
         className={`fixed top-0 w-full z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-stone-950/80 backdrop-blur-xl border-b border-white/10"
-            : "bg-transparent"
+            ? 'bg-stone-950/80 backdrop-blur-xl border-b border-white/10'
+            : 'bg-transparent'
         }`}
       >
         <div className="h-[80px] flex items-center">
           <div className="w-[92%] max-w-[1400px] mx-auto flex items-center justify-between">
-
             {/* LOGO */}
             <NavLink to="/" className="flex flex-col leading-none">
               <span className="text-white text-lg md:text-xl tracking-[0.5em] font-light">
@@ -80,7 +105,7 @@ const Navbar = () => {
                     to={link.path}
                     className={({ isActive }) =>
                       `transition duration-300 ${
-                        isActive ? "text-white" : "text-white/50"
+                        isActive ? 'text-white' : 'text-white/50'
                       } group-hover:text-white`
                     }
                   >
@@ -91,7 +116,7 @@ const Navbar = () => {
                     {({ isActive }) => (
                       <span
                         className={`absolute -bottom-2 left-0 h-[1px] bg-white transition-all duration-300 ${
-                          isActive ? "w-full" : "w-0 group-hover:w-full"
+                          isActive ? 'w-full' : 'w-0 group-hover:w-full'
                         }`}
                       />
                     )}
@@ -118,19 +143,22 @@ const Navbar = () => {
                 </button>
               )}
 
-              <button className="relative">
+              <button className="relative" onClick={() => navigate('/cart')}>
                 <motion.div whileHover={{ scale: 1.15 }}>
                   <IconCart />
                 </motion.div>
 
                 <span className="absolute -top-1 -right-2 bg-white text-black text-[9px] w-4 h-4 flex items-center justify-center rounded-full">
-                  0
+                  {items.reduce((total, item) => total + item.quantity, 0)}
                 </span>
               </button>
             </div>
 
             {/* MOBILE BUTTON */}
-            <button className="lg:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+            <button
+              className="lg:hidden"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
               {menuOpen ? <IconX /> : <IconMenu />}
             </button>
           </div>
@@ -156,7 +184,7 @@ const Navbar = () => {
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
                     `text-3xl font-serif italic transition ${
-                      isActive ? "text-white" : "text-white/50"
+                      isActive ? 'text-white' : 'text-white/50'
                     } hover:text-white`
                   }
                 >
