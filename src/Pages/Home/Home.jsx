@@ -8,7 +8,7 @@ const fadeIn = {
   initial: { opacity: 0, y: 30 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
 };
 
 const SignatureCollection = () => {
@@ -34,7 +34,6 @@ const SignatureCollection = () => {
   return (
     <section className="py-32 bg-stone-950 px-[6%]">
       <div className="max-w-[1800px] mx-auto">
-        
         <motion.div
           initial={fadeIn.initial}
           whileInView={fadeIn.whileInView}
@@ -47,8 +46,10 @@ const SignatureCollection = () => {
               Seasonal Selection
             </span>
             <h2 className="text-white text-6xl md:text-8xl font-serif italic leading-[0.9]">
-              The Signature <br /> 
-              <span className="font-sans not-italic font-black text-white/90 uppercase tracking-tighter">Series.</span>
+              The Signature <br />
+              <span className="font-sans not-italic font-black text-white/90 uppercase tracking-tighter">
+                Series.
+              </span>
             </h2>
           </div>
 
@@ -79,7 +80,11 @@ const SignatureCollection = () => {
                 key={item.id}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                transition={{
+                  delay: idx * 0.2,
+                  duration: 1,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
                 viewport={{ once: true }}
                 className="group cursor-pointer"
               >
@@ -90,7 +95,7 @@ const SignatureCollection = () => {
                     className="w-full h-full object-cover grayscale transition-all duration-1000 ease-out group-hover:grayscale-0 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-stone-950/20 group-hover:bg-transparent transition-colors duration-700" />
-                  
+
                   {/* Floating price on hover */}
                   <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <span className="px-4 py-2 bg-stone-950/80 backdrop-blur-md border border-white/10 text-[11px] text-[#B58D7C] font-bold tracking-widest">
@@ -101,7 +106,7 @@ const SignatureCollection = () => {
 
                 <div className="space-y-4">
                   <p className="text-[#B58D7C] text-[9px] font-bold tracking-[0.5em] uppercase">
-                    {item.category || "Limited Edition"}
+                    {item.category || 'Limited Edition'}
                   </p>
                   <h4 className="text-white text-2xl font-serif italic group-hover:text-[#B58D7C] transition-colors duration-500">
                     {item.name}
@@ -121,7 +126,6 @@ const CraftsmanshipPhilosophy = () => {
   return (
     <section className="py-40 bg-[#0C0C0C] px-[6%] border-y border-white/5 overflow-hidden">
       <div className="max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
-        
         <motion.div
           initial={{ opacity: 0, scale: 1.1 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -149,26 +153,33 @@ const CraftsmanshipPhilosophy = () => {
           </span>
 
           <h2 className="text-white text-5xl md:text-7xl font-serif italic mb-10 leading-[0.9]">
-            Beyond <br /> <span className="not-italic font-sans font-black tracking-tighter uppercase opacity-80">The Seams.</span>
+            Beyond <br />{' '}
+            <span className="not-italic font-sans font-black tracking-tighter uppercase opacity-80">
+              The Seams.
+            </span>
           </h2>
 
           <div className="space-y-8">
             <p className="text-stone-400 text-lg font-light leading-relaxed">
-              At Trendora, we don't just measure limbs; we measure character. Our tailoring is an architectural study of the wearer.
+              At Trendora, we don't just measure limbs; we measure character.
+              Our tailoring is an architectural study of the wearer.
             </p>
             <p className="text-stone-500 text-sm leading-loose">
-              Every stitch serves a purpose. Every fold is intentional. In an age of fast consumption, we remain steadfast in the slow, meticulous art of the hand-rolled lapel and the floating canvas.
+              Every stitch serves a purpose. Every fold is intentional. In an
+              age of fast consumption, we remain steadfast in the slow,
+              meticulous art of the hand-rolled lapel and the floating canvas.
             </p>
-            
+
             <div className="pt-8">
-               <button className="px-12 py-5 border border-white/10 hover:border-[#B58D7C] text-[10px] uppercase font-black tracking-[0.4em] transition-all duration-500 group relative overflow-hidden">
-                  <span className="relative z-10 group-hover:text-black">Discover the Archive</span>
-                  <div className="absolute inset-0 bg-[#B58D7C] -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-               </button>
+              <button className="px-12 py-5 border border-white/10 hover:border-[#B58D7C] text-[10px] uppercase font-black tracking-[0.4em] transition-all duration-500 group relative overflow-hidden">
+                <span className="relative z-10 group-hover:text-black">
+                  Discover the Archive
+                </span>
+                <div className="absolute inset-0 bg-[#B58D7C] -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+              </button>
             </div>
           </div>
         </motion.div>
-
       </div>
     </section>
   );
@@ -176,9 +187,18 @@ const CraftsmanshipPhilosophy = () => {
 
 const ProcessSection = () => {
   const steps = [
-    { title: "The Dialogue", desc: "Understanding the lifestyle and silhouette through an intimate consultation." },
-    { title: "The Blueprint", desc: "Capturing thirty unique data points to draft a custom pattern from scratch." },
-    { title: "The Baste", desc: "A skeletal fitting that allows for meticulous adjustments to balance and drape." }
+    {
+      title: 'The Dialogue',
+      desc: 'Understanding the lifestyle and silhouette through an intimate consultation.',
+    },
+    {
+      title: 'The Blueprint',
+      desc: 'Capturing thirty unique data points to draft a custom pattern from scratch.',
+    },
+    {
+      title: 'The Baste',
+      desc: 'A skeletal fitting that allows for meticulous adjustments to balance and drape.',
+    },
   ];
 
   return (
@@ -186,7 +206,7 @@ const ProcessSection = () => {
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-24 relative">
         {/* Connection Line */}
         <div className="absolute top-1/4 left-0 w-full h-px bg-white/5 hidden md:block"></div>
-        
+
         {steps.map((step, i) => (
           <motion.div
             key={step.title}
@@ -235,7 +255,9 @@ const Home = () => {
 
       {/* Subtle Footer Identity */}
       <section className="py-24 text-center border-t border-white/5">
-         <p className="text-[10px] tracking-[1.5em] uppercase text-white/10 font-black">Trendora &bull; Savile Row &bull; Est. 1924</p>
+        <p className="text-[10px] tracking-[1.5em] uppercase text-white/10 font-black">
+          Trendora &bull; Savile Row &bull; Est. 2012
+        </p>
       </section>
     </div>
   );

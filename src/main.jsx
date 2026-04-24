@@ -15,6 +15,8 @@ import AllSuit from './Pages/Home/AllSuit';
 import SuitDetails from './Pages/Home/SuitDetails';
 import AuthProvider from './Auth/AuthProvider';
 import Cart from './Components/Cart/Cart';
+import AllProducts from './Pages/Accessories/AllProducts';
+import ProductDetails from './Pages/Accessories/ProductDetails';
 
 const router = createBrowserRouter([
   {
@@ -68,6 +70,14 @@ const router = createBrowserRouter([
     path: '/product/:id',
     Component: SuitDetails,
   },
+  {
+    path: '/all-accessories',
+    Component: AllProducts,
+  },
+  {
+    path: '/accessories/:id',
+    Component: ProductDetails,
+  }
 ]);
 createRoot(document.getElementById('root')).render(
   <StrictMode>
